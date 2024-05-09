@@ -1,0 +1,12 @@
+version: '1'
+services:
+  email_scrapper:
+    image: #TODO
+    container_name: es
+    environment:
+      - DEBUG=True
+    volumes:
+      - ./email_scrapper:/opt/es_app
+
+
+
