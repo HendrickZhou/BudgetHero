@@ -2,7 +2,9 @@
 all: build
 
 build:
-	go build ./service
+	# go build -o ./server_build ./service
+	go build ./service/auth
+	go build ./service/mail
 
 clean:
-	rm -f service
+	rm -f server_build
