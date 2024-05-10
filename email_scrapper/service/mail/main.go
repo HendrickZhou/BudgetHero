@@ -8,7 +8,6 @@ import (
 	"github.com/emersion/go-imap/v2/imapclient"
 	"github.com/emersion/go-sasl"
 
-	"encoding/base64"
 	"encoding/json"
 	"os"
 
@@ -20,8 +19,9 @@ import (
 
 const gmail_tls_server_address string = "imap.gmail.com"
 const tls_port int = 993
-const username string = "hang_zhou@alumni.brown.edu"
-const pswd string = "Harheihei@6@6"
+
+// const username string = "zhouhangseu@gmail.com"
+// const pswd string = "Harheihei@6@6"
 
 func tokenFromFile(file string) (*oauth2.Token, error) {
 	f, err := os.Open(file)
@@ -56,29 +56,24 @@ func main() {
 	if err != nil {
 		log.Fatalf("no token file found")
 	}
-	// var opts sasl.OAuthBearerOptions = sasl.OAuthBearerOptions{
-	// 	Username: "hang_zhou@alumni.brown.edu",
-	// 	Token:    tokenJson.AccessToken,
-	// }
 
 	if !client.Caps().Has(imap.AuthCap(sasl.OAuthBearer)) {
 		log.Fatal("OAUTHBEARER not supported by the server")
 	}
 	saslClient := sasl.NewOAuthBearerClient(&sasl.OAuthBearerOptions{
-		Username: base64.StdEncoding.EncodeToString([]byte("hang_zhou@alumni.brown.edu")),
-		Token:    base64.StdEncoding.EncodeToString([]byte(tokenJson.AccessToken)),
-		Port:     tls_port,
+		Username: "hang_zhou@alumni.brown.edu",
+		Token:    tokenJson.AccessToken,
 	})
 	if err := client.Authenticate(saslClient); err != nil {
 		log.Fatalf("authentication failed: %v", err)
 	}
 
 	// login (blocking
-	err = client.Login(username, pswd).Wait()
-	if err != nil {
-		log.Print(err)
-		log.Fatalf("login fail, check usrname pswd")
-	}
+	// err = client.Login(username, pswd).Wait()
+	// if err != nil {
+	// 	log.Print(err)
+	// 	log.Fatalf("login fail, check usrname pswd")
+	// }
 
 	// select a mailbox(in/out/trash etc)
 	mailboxes, err := client.List("", "", nil).Collect()

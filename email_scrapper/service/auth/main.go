@@ -12,7 +12,6 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 
-	// "google.golang.org/api/docs/v1"
 	"google.golang.org/api/gmail/v1"
 	"google.golang.org/api/option"
 )
@@ -39,7 +38,7 @@ func getTokenFromWeb(config *oauth2.Config) *oauth2.Token {
 		log.Fatalf("Unable to read authorization code: %v", err)
 	}
 
-	tok, err := config.Exchange(oauth2.NoContext, authCode)
+	tok, err := config.Exchange(context.Background(), authCode)
 	if err != nil {
 		log.Fatalf("Unable to retrieve token from web: %v", err)
 	}
@@ -69,6 +68,11 @@ func saveToken(path string, token *oauth2.Token) {
 	json.NewEncoder(f).Encode(token)
 }
 
+// refresh token
+func refreshToken(path string, token *oauth2.Token) {
+	saveToken(path, token)
+}
+
 func main() {
 	ctx := context.Background()
 	b, err := os.ReadFile("/Users/zhouhang/Project/BudgetHero/email_scrapper/credentials.json")
@@ -77,7 +81,7 @@ func main() {
 	}
 
 	// If modifying these scopes, delete your previously saved token.json.
-	config, err := google.ConfigFromJSON(b, gmail.GmailReadonlyScope)
+	config, err := google.ConfigFromJSON(b, gmail.MailGoogleComScope)
 	if err != nil {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
