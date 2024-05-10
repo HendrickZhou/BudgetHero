@@ -22,5 +22,5 @@ go.work
 
 
 # secret
-token.json
-credentials.json
+email_scrapper/token.json
+email_scrapper/credentials.json
